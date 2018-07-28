@@ -1,0 +1,161 @@
+<html lang="en">
+	<head>
+	  <meta charset="utf-8">
+	  <title>Tic Tac Toe</title>
+	  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
+  	<style>
+  		@import url('https://fonts.googleapis.com/css?family=Pangolin');
+  		body{
+  			background-image: url("chalk.jpg");
+  			background-size: cover;
+  		}
+		table, td, tr {
+			border:1px solid black; 
+		}
+
+		td {
+		    width:70px;
+			height:70px;
+		}
+		h1{
+			font-family: 'Pangolin', cursive;
+			margin-top: 40px;
+		}
+		#center{
+			text-align: center;
+		}
+		#tictac{
+			height: 400px;
+			width: 400px;
+			margin: 0 auto;
+			text-align: center;
+			font-size: 52px;
+			font-family: 'Pangolin', cursive;
+		}
+		#message{
+			font-family: 'Pangolin', cursive;
+			margin-bottom: 10px;
+		}
+		a{
+			text-decoration: none;
+		}
+		button{
+			margin-top: 10px;
+		}
+
+		</style>
+	</head>
+	
+	<body onload="startGame()">
+		<div id="center">
+		<h1>Tic Tac Toe</h1>
+	  <div id="message">Messages here.</div>
+	  <!-- use table as gameboard -->
+	  <table id="tictac">
+			<tr id="row1">
+				<td id="s1" onclick="nextMove(this)"></td>
+				<td id="s2" onclick="nextMove(this)"></td>
+				<td id="s3" onclick="nextMove(this)"></td>
+			</tr>
+			<tr id="row2">
+				<td id="s4" onclick="nextMove(this)"></td>
+				<td id="s5" onclick="nextMove(this)"></td>
+				<td id="s6" onclick="nextMove(this)"></td>
+			</tr>
+			<tr id="row3">
+				<td id="s7" onclick="nextMove(this)"></td>
+				<td id="s8" onclick="nextMove(this)"></td>
+				<td id="s9" onclick="nextMove(this)"></td>
+			</tr>
+		</table>
+		<button><a href="javascript:startGame();">Start Over</a></button>
+		</div>
+	</body>
+
+	<!-- put the business logic of the game in here -->
+	<script>
+		function startGame(){
+			for(var i=1; i<=9; i++){
+				clearBox(i);
+			}
+			document.turn = "X";
+			if(Math.random()<0.5){
+				document.turn = "O";
+			}
+			document.winner = null;
+			setMessage(document.turn + " get's to start.");
+		}
+
+		function setMessage(msg){
+			document.getElementById("message").innerText = msg;
+		}
+
+		function nextMove(square){
+			if(document.winner != null){
+				setMessage(document.turn + " already won.")
+			} else if(square.innerText == ''){
+			square.innerText = document.turn;
+			switchTurn();
+		} else {
+			setMessage('Pic another square.');
+			}
+		}
+
+		function switchTurn(){
+			if(checkForWinner(document.turn)){
+				setMessage("Congrats " + document.turn + ", you won!")
+				document.winner = document.turn;
+			} else if(checkForTie()) {
+                setMessage("Its a TIE..!! Play again...!!!");
+            } else if(document.turn == "X"){
+				document.turn = "O";
+				setMessage("It's " + document.turn + "'s turn.");
+			} else {
+				document.turn = "X";
+				setMessage("It's " + document.turn + "'s turn.");
+			}
+		}
+
+		function checkForWinner(move){
+			var result = false;
+			if(checkRow(1,2,3, move) ||
+				checkRow(4,5,6, move) ||
+				checkRow(7,8,8, move) ||
+				checkRow(1,4,7, move) ||
+				checkRow(2,5,8, move) ||
+				checkRow(3,6,9, move) ||
+				checkRow(1,5,9, move) ||
+				checkRow(3,5,7, move)) {
+					result = true;
+			}	
+			return result;
+		}
+
+		function checkForTie()
+        {
+            for(var i=1;i<10;i++) {
+              if(getBox(i)=="")
+               return false;
+            }
+            return true;
+        }
+
+		function checkRow(a,b,c,move){
+			var result = false;
+			if(getBox(a) == move && getBox(b) == move && getBox(c) == move){
+				result = true;
+			}
+			return result;
+		}
+
+		function getBox(number){
+			return document.getElementById("s" + number).innerText;
+		}
+
+		function clearBox(number){
+			document.getElementById('s' + number).innerText = "";
+		}
+
+	</script>
+
+</html>
